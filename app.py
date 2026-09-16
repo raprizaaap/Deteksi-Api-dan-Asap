@@ -14,6 +14,7 @@ import pandas as pd
 import io
 import time
 import av
+import textwrap
 
 from streamlit_webrtc import (
     webrtc_streamer,
@@ -39,7 +40,7 @@ st.set_page_config(
 # ============================================================
 
 st.markdown(
-    """
+    textwrap.dedent("""
     <style>
 
     @import url(
@@ -1153,7 +1154,7 @@ st.markdown(
 
 
     </style>
-    """,
+    """),
     unsafe_allow_html=True,
 )
 
@@ -1192,7 +1193,7 @@ except Exception as e:
 # ============================================================
 
 st.markdown(
-    """
+    textwrap.dedent("""
     <div class="hero">
 
         <div class="hero-top">
@@ -1265,7 +1266,7 @@ st.markdown(
         </div>
 
     </div>
-    """,
+    """),
     unsafe_allow_html=True,
 )
 
@@ -1293,17 +1294,17 @@ if not model_loaded:
 with st.sidebar:
 
     st.markdown(
-        '<div class="side-title">'
+        textwrap.dedent('<div class="side-title">'
         '⚙️ Detection Controls'
-        '</div>',
+        '</div>'),
         unsafe_allow_html=True
     )
 
 
     st.markdown(
-        '<div class="side-caption">'
+        textwrap.dedent('<div class="side-caption">'
         'Tune inference before running'
-        '</div>',
+        '</div>'),
         unsafe_allow_html=True
     )
 
@@ -1356,9 +1357,9 @@ with st.sidebar:
 
 
     st.markdown(
-        '<div class="side-caption">'
+        textwrap.dedent('<div class="side-caption">'
         'MODEL'
-        '</div>',
+        '</div>'),
         unsafe_allow_html=True
     )
 
@@ -1369,9 +1370,9 @@ with st.sidebar:
 
 
     st.markdown(
-        '<div class="side-caption">'
+        textwrap.dedent('<div class="side-caption">'
         'CLASSES'
-        '</div>',
+        '</div>'),
         unsafe_allow_html=True
     )
 
@@ -1382,9 +1383,9 @@ with st.sidebar:
 
 
     st.markdown(
-        '<div class="side-caption">'
+        textwrap.dedent('<div class="side-caption">'
         'INPUT FORMATS'
-        '</div>',
+        '</div>'),
         unsafe_allow_html=True
     )
 
@@ -1425,7 +1426,7 @@ with tab_upload:
     with left:
 
         st.markdown(
-            """
+            textwrap.dedent("""
             <div class="card">
 
                 <div class="section-label">
@@ -1454,7 +1455,7 @@ with tab_upload:
                 </div>
 
             </div>
-            """,
+            """),
             unsafe_allow_html=True,
         )
 
@@ -1494,7 +1495,7 @@ with tab_upload:
         else:
 
             st.markdown(
-                """
+                textwrap.dedent("""
                 <div class="empty-state">
 
                     <div class="big">
@@ -1506,7 +1507,7 @@ with tab_upload:
                     a file above.
 
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True,
             )
 
@@ -1518,7 +1519,7 @@ with tab_upload:
     with right:
 
         st.markdown(
-            """
+            textwrap.dedent("""
             <div class="card">
 
                 <div class="section-label">
@@ -1547,7 +1548,7 @@ with tab_upload:
                 </div>
 
             </div>
-            """,
+            """),
             unsafe_allow_html=True,
         )
 
@@ -1583,7 +1584,7 @@ with tab_upload:
 
 
                 st.markdown(
-                    f"""
+                    textwrap.dedent(f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1602,7 +1603,7 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """,
+                    """),
                     unsafe_allow_html=True,
                 )
 
@@ -1610,7 +1611,7 @@ with tab_upload:
             with m2:
 
                 st.markdown(
-                    f"""
+                    textwrap.dedent(f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1629,7 +1630,7 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """,
+                    """),
                     unsafe_allow_html=True,
                 )
 
@@ -1646,7 +1647,7 @@ with tab_upload:
         else:
 
             st.markdown(
-                """
+                textwrap.dedent("""
                 <div class="empty-state">
 
                     <div class="big">
@@ -1657,7 +1658,7 @@ with tab_upload:
                     to enable detection.
 
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True,
             )
 
@@ -1811,7 +1812,7 @@ with tab_upload:
 
 
             st.markdown(
-                """
+                textwrap.dedent("""
                 <div class="section-label">
 
                     <span class="step-tag">
@@ -1828,7 +1829,7 @@ with tab_upload:
                     Detection output
 
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True,
             )
 
@@ -1886,7 +1887,7 @@ with tab_upload:
                 with c1:
 
                     st.markdown(
-                        f"""
+                        textwrap.dedent(f"""
                         <div
                             class="metric accent-fire"
                         >
@@ -1900,7 +1901,7 @@ with tab_upload:
                             </div>
 
                         </div>
-                        """,
+                        """),
                         unsafe_allow_html=True,
                     )
 
@@ -1908,7 +1909,7 @@ with tab_upload:
                 with c2:
 
                     st.markdown(
-                        f"""
+                        textwrap.dedent(f"""
                         <div
                             class="metric accent-smoke"
                         >
@@ -1922,7 +1923,7 @@ with tab_upload:
                             </div>
 
                         </div>
-                        """,
+                        """),
                         unsafe_allow_html=True,
                     )
 
@@ -1931,7 +1932,7 @@ with tab_upload:
 
 
                 st.markdown(
-                    f"""
+                    textwrap.dedent(f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1948,7 +1949,7 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """,
+                    """),
                     unsafe_allow_html=True,
                 )
 
@@ -2108,7 +2109,7 @@ with tab_upload:
             else:
 
                 st.markdown(
-                    """
+                    textwrap.dedent("""
                     <div class="empty-state">
 
                         <div class="big">
@@ -2125,7 +2126,7 @@ with tab_upload:
                         slider in the sidebar.
 
                     </div>
-                    """,
+                    """),
                     unsafe_allow_html=True,
                 )
 
@@ -2197,7 +2198,7 @@ class FireSmokeProcessor(
 with tab_camera:
 
     st.markdown(
-        """
+        textwrap.dedent("""
         <div class="camera-card">
 
             <div class="section-label">
@@ -2227,7 +2228,7 @@ with tab_camera:
             </div>
 
         </div>
-        """,
+        """),
         unsafe_allow_html=True
     )
 
@@ -2280,7 +2281,7 @@ with tab_camera:
     # ========================================================
 
     st.markdown(
-        f"""
+        textwrap.dedent(f"""
         <div class="camera-info">
 
             📷 <b>Kamera:</b>
@@ -2307,7 +2308,7 @@ with tab_camera:
             untuk menghentikan kamera.
 
         </div>
-        """,
+        """),
         unsafe_allow_html=True
     )
 
@@ -2394,13 +2395,13 @@ with tab_camera:
     if webrtc_ctx.state.playing:
 
         st.markdown(
-            """
+            textwrap.dedent("""
             <div class="camera-live">
 
                 🟢 CAMERA LIVE
 
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
@@ -2426,12 +2427,12 @@ with tab_camera:
 # ============================================================
 
 st.markdown(
-    """
+    textwrap.dedent("""
     <div class="footer-note">
 
         EMBERSIGHT · FIRE & SMOKE DETECTION · YOLOv8
 
     </div>
-    """,
+    """),
     unsafe_allow_html=True,
 )
