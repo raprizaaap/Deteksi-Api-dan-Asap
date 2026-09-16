@@ -1,0 +1,1 @@
+https://universe.roboflow.com/situational-awarnessinnovsense/fire-detection-ypseh/dataset/1
