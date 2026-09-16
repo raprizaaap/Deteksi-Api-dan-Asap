@@ -1,7 +1,7 @@
 # ============================================================
 # EMBERSIGHT - FIRE & SMOKE DETECTION
 # YOLOv8n + Streamlit
-# Revised UI/UX + Live Camera
+# GitHub / Streamlit Cloud Ready
 # ============================================================
 
 import streamlit as st
@@ -14,7 +14,6 @@ import pandas as pd
 import io
 import time
 import av
-import textwrap
 
 from streamlit_webrtc import (
     webrtc_streamer,
@@ -40,13 +39,12 @@ st.set_page_config(
 # ============================================================
 
 st.markdown(
-    textwrap.dedent("""
+    """
     <style>
 
     @import url(
         'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800;900&display=swap'
     );
-
 
     :root {
         --ink: #111318;
@@ -91,30 +89,182 @@ st.markdown(
 
 
     .stApp {
+        position: relative;
+
         background:
             radial-gradient(
+                circle at 15% 105%,
+                rgba(233,91,47,.30),
+                transparent 42%
+            ),
+
+            radial-gradient(
+                circle at 50% 112%,
+                rgba(255,153,64,.24),
+                transparent 46%
+            ),
+
+            radial-gradient(
+                circle at 85% 105%,
+                rgba(200,67,28,.28),
+                transparent 42%
+            ),
+
+            radial-gradient(
                 circle at 88% 0%,
-                rgba(233,91,47,.12),
+                rgba(233,91,47,.10),
                 transparent 32%
             ),
 
             radial-gradient(
                 circle at 0% 85%,
-                rgba(83,96,109,.09),
+                rgba(83,96,109,.07),
                 transparent 30%
             ),
 
             var(--paper);
 
+        background-size:
+            140% 140%,
+            160% 160%,
+            140% 140%,
+            100% 100%,
+            100% 100%,
+            100% 100%;
+
+        background-repeat: no-repeat;
+
+        animation:
+            emberFlicker 9s ease-in-out infinite;
+
         color: var(--ink);
     }
 
 
+    .stApp::before {
+        content: "";
+
+        position: absolute;
+        inset: 0;
+
+        z-index: 0;
+        pointer-events: none;
+
+        opacity: .35;
+
+        background-image:
+            radial-gradient(
+                circle,
+                rgba(255,180,110,.9) 0%,
+                rgba(255,180,110,0) 70%
+            ),
+
+            radial-gradient(
+                circle,
+                rgba(233,91,47,.85) 0%,
+                rgba(233,91,47,0) 70%
+            ),
+
+            radial-gradient(
+                circle,
+                rgba(255,140,70,.8) 0%,
+                rgba(255,140,70,0) 70%
+            );
+
+        background-size:
+            3px 3px,
+            2px 2px,
+            4px 4px;
+
+        background-repeat:
+            repeat-x,
+            repeat-x,
+            repeat-x;
+
+        background-position:
+            8% 100%,
+            46% 100%,
+            78% 100%;
+
+        animation:
+            embersRise 7s linear infinite;
+    }
+
+
+    @keyframes emberFlicker {
+
+        0%,
+        100% {
+            background-position:
+                15% 105%,
+                50% 112%,
+                85% 105%,
+                88% 0%,
+                0% 85%,
+                0 0;
+        }
+
+        25% {
+            background-position:
+                22% 95%,
+                55% 100%,
+                78% 100%,
+                88% 0%,
+                0% 85%,
+                0 0;
+        }
+
+        50% {
+            background-position:
+                10% 100%,
+                45% 108%,
+                90% 112%,
+                88% 0%,
+                0% 85%,
+                0 0;
+        }
+
+        75% {
+            background-position:
+                18% 110%,
+                52% 96%,
+                80% 104%,
+                88% 0%,
+                0% 85%,
+                0 0;
+        }
+    }
+
+
+    @keyframes embersRise {
+
+        0% {
+            background-position:
+                8% 100%,
+                46% 100%,
+                78% 100%;
+
+            opacity: .35;
+        }
+
+        100% {
+            background-position:
+                8% -10%,
+                46% -10%,
+                78% -10%;
+
+            opacity: 0;
+        }
+    }
+
+
     .block-container {
+        position: relative;
+        z-index: 1;
+
         max-width: 1180px;
 
         padding-top: 1.6rem;
-
         padding-bottom: 4rem;
     }
 
@@ -160,7 +310,6 @@ st.markdown(
         padding: 36px 40px;
 
         position: relative;
-
         overflow: hidden;
 
         margin-bottom: 22px;
@@ -199,7 +348,6 @@ st.markdown(
         display: flex;
 
         align-items: center;
-
         justify-content: space-between;
 
         gap: 16px;
@@ -365,7 +513,6 @@ st.markdown(
         display: inline-flex;
 
         align-items: center;
-
         justify-content: center;
 
         width: 22px;
@@ -612,175 +759,26 @@ st.markdown(
        ====================================================== */
 
     [data-testid="stFileUploader"] {
-        width: 100%;
-    }
-
-
-    /* Dropzone utama */
-    [data-testid="stFileUploaderDropzone"] {
         border:
-            1.5px dashed
-            #d5d5cf !important;
+            1px dashed
+            #cfcfca;
 
         border-radius:
-            16px !important;
+            var(--radius-md);
+
+        padding: 10px;
 
         background:
-            #ffffff !important;
-
-        min-height:
-            82px !important;
-
-        padding:
-            14px 18px !important;
+            #fbfbf8;
 
         transition:
-            border-color .2s ease,
-            background .2s ease,
-            box-shadow .2s ease;
+            border-color .2s ease;
     }
 
 
-    /* Hover dropzone */
-    [data-testid="stFileUploaderDropzone"]:hover {
+    [data-testid="stFileUploader"]:hover {
         border-color:
-            #e95b2f !important;
-
-        background:
-            #fffaf7 !important;
-
-        box-shadow:
-            0 4px 16px
-            rgba(233,91,47,.07) !important;
-    }
-
-
-    /* Container instructions */
-    [data-testid="stFileUploaderDropzoneInstructions"] {
-        color:
-            #6b7078 !important;
-    }
-
-
-    /* Semua teks instruction */
-    [data-testid="stFileUploaderDropzoneInstructions"] span {
-        color:
-            #6b7078 !important;
-
-        font-family:
-            'Manrope',
-            sans-serif !important;
-    }
-
-
-    /* ======================================================
-       UPLOAD BUTTON
-       ====================================================== */
-
-    [data-testid="stFileUploaderDropzone"] button {
-        background:
-            #111318 !important;
-
-        color:
-            #ffffff !important;
-
-        border:
-            1px solid
-            #111318 !important;
-
-        border-radius:
-            10px !important;
-
-        font-family:
-            'Manrope',
-            sans-serif !important;
-
-        font-weight:
-            700 !important;
-
-        padding:
-            7px 15px !important;
-
-        min-height:
-            38px !important;
-
-        transition:
-            background .15s ease,
-            border-color .15s ease,
-            transform .12s ease;
-    }
-
-
-    /* Teks di dalam tombol */
-    [data-testid="stFileUploaderDropzone"] button span {
-        color:
-            #ffffff !important;
-
-        -webkit-text-fill-color:
-            #ffffff !important;
-    }
-
-
-    /* Hover button */
-    [data-testid="stFileUploaderDropzone"] button:hover {
-        background:
-            #e95b2f !important;
-
-        border-color:
-            #e95b2f !important;
-
-        transform:
-            translateY(-1px);
-    }
-
-
-    /* ======================================================
-       FILE SIZE TEXT
-       ====================================================== */
-
-    [data-testid="stFileUploaderDropzoneInstructions"] small {
-        color:
-            #9a9fa8 !important;
-
-        font-family:
-            'DM Mono',
-            monospace !important;
-
-        font-size:
-            .68rem !important;
-    }
-
-
-    /* ======================================================
-       UPLOAD ICON
-       ====================================================== */
-
-    [data-testid="stFileUploaderDropzone"] svg {
-        color:
-            #e95b2f !important;
-    }
-
-
-    /* ======================================================
-       FILE YANG SUDAH DIPILIH
-       ====================================================== */
-
-    [data-testid="stFileUploaderFile"] {
-        background:
-            #fffaf7 !important;
-
-        border:
-            1px solid
-            #f0d5c9 !important;
-
-        border-radius:
-            10px !important;
-    }
-
-
-    [data-testid="stFileUploaderFile"] span {
-        color:
-            #111318 !important;
+            var(--fire);
     }
 
 
@@ -837,6 +835,10 @@ st.markdown(
        ====================================================== */
 
     section[data-testid="stSidebar"] {
+        position: relative;
+
+        z-index: 2;
+
         background:
             #fcfcfa;
 
@@ -862,8 +864,7 @@ st.markdown(
 
         font-size: .72rem;
 
-        color:
-            var(--muted);
+        color: var(--muted);
 
         margin:
             2px 0;
@@ -978,183 +979,13 @@ st.markdown(
     }
 
 
-    /* ======================================================
-       TABS - SELALU MERAH
-       ====================================================== */
-
-    [data-baseweb="tab-list"] {
-        gap: 8px !important;
-    }
-
-
-    [data-baseweb="tab-list"] [data-baseweb="tab"] {
-        color:
-            #e95b2f !important;
-
-        font-weight:
-            800 !important;
-
-        opacity:
-            1 !important;
-    }
-
-
-    [data-baseweb="tab-list"]
-    [data-baseweb="tab"][aria-selected="false"] {
-        color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-    }
-
-
-    [data-baseweb="tab-list"]
-    [data-baseweb="tab"][aria-selected="true"] {
-        color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-    }
-
-
-    [data-baseweb="tab-list"]
-    [data-baseweb="tab"]:hover {
-        color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-    }
-
-
-    [data-baseweb="tab-list"]
-    [data-baseweb="tab"] p {
-        color:
-            #e95b2f !important;
-
-        -webkit-text-fill-color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-
-        font-weight:
-            800 !important;
-    }
-
-
-    [data-baseweb="tab-list"]
-    [data-baseweb="tab"] span {
-        color:
-            #e95b2f !important;
-
-        -webkit-text-fill-color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-    }
-
-
-    [data-baseweb="tab-highlight"] {
-        background-color:
-            #e95b2f !important;
-
-        height:
-            2px !important;
-    }
-
-
-    /* ======================================================
-       RADIO CAMERA - MERAH
-       ====================================================== */
-
-    div[data-testid="stRadio"] {
-        color:
-            #e95b2f !important;
-    }
-
-
-    div[data-testid="stRadio"] label {
-        color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-
-        font-weight:
-            700 !important;
-    }
-
-
-    div[data-testid="stRadio"] label p,
-    div[data-testid="stRadio"] label span {
-        color:
-            #e95b2f !important;
-
-        -webkit-text-fill-color:
-            #e95b2f !important;
-
-        opacity:
-            1 !important;
-
-        font-weight:
-            700 !important;
-    }
-
-
-    div[data-testid="stRadio"] label:hover {
-        color:
-            #e95b2f !important;
-    }
-
-
-    div[data-testid="stRadio"]
-    label:has(input:checked) {
-        color:
-            #e95b2f !important;
-
-        font-weight:
-            800 !important;
-    }
-
-
-    div[data-testid="stRadio"]
-    label:has(input:checked) p,
-    div[data-testid="stRadio"]
-    label:has(input:checked) span {
-        color:
-            #e95b2f !important;
-
-        -webkit-text-fill-color:
-            #e95b2f !important;
-    }
-
-
-    /* Radio circle */
-    div[data-testid="stRadio"]
-    label
-    div[role="radio"] {
+    hr {
         border-color:
-            #e95b2f !important;
+            var(--line) !important;
     }
-
-
-    div[data-testid="stRadio"]
-    label
-    div[role="radio"][aria-checked="true"] {
-        background-color:
-            #e95b2f !important;
-
-        border-color:
-            #e95b2f !important;
-    }
-
 
     </style>
-    """),
+    """,
     unsafe_allow_html=True,
 )
 
@@ -1176,15 +1007,11 @@ def load_model():
 
 
 try:
-
     model = load_model()
-
     model_loaded = True
 
 except Exception as e:
-
     model_loaded = False
-
     model_error = str(e)
 
 
@@ -1192,8 +1019,8 @@ except Exception as e:
 # 5. HEADER
 # ============================================================
 
-st.markdown(
-    textwrap.dedent("""
+st.html(
+    """
     <div class="hero">
 
         <div class="hero-top">
@@ -1201,62 +1028,38 @@ st.markdown(
             <div>
 
                 <div class="kicker">
-
                     <span class="dot"></span>
-
                     Computer Vision / YOLOv8
-
                 </div>
 
-
                 <h1>
-
                     EmberSight
-
-                    <span style="color:#e95b2f;">
-                        .
-                    </span>
-
+                    <span style="color:#e95b2f;">.</span>
                 </h1>
 
-
                 <p>
-
                     Visual detection interface for identifying
                     <b>Fire</b> and <b>Smoke</b>
                     from uploaded images or live camera,
                     powered by a custom-trained YOLOv8 model.
-
                 </p>
-
 
                 <div class="badge-row">
 
                     <span class="badge">
-
                         🔥 MODEL · YOLOv8n / 640px
-
                     </span>
 
-
                     <span class="badge ghost">
-
                         Classes · Fire, Smoke
-
                     </span>
 
-
                     <span class="badge ghost">
-
                         JPG · PNG · WEBP
-
                     </span>
 
-
                     <span class="badge ghost">
-
                         📷 Live Camera
-
                     </span>
 
                 </div>
@@ -1266,8 +1069,7 @@ st.markdown(
         </div>
 
     </div>
-    """),
-    unsafe_allow_html=True,
+    """
 )
 
 
@@ -1293,48 +1095,34 @@ if not model_loaded:
 
 with st.sidebar:
 
-    st.markdown(
-        textwrap.dedent('<div class="side-title">'
-        '⚙️ Detection Controls'
-        '</div>'),
-        unsafe_allow_html=True
+    st.html(
+        """
+        <div class="side-title">
+            ⚙️ Detection Controls
+        </div>
+
+        <div class="side-caption">
+            Tune inference before running
+        </div>
+        """
     )
-
-
-    st.markdown(
-        textwrap.dedent('<div class="side-caption">'
-        'Tune inference before running'
-        '</div>'),
-        unsafe_allow_html=True
-    )
-
 
     st.write("")
 
-
     confidence = st.slider(
-
         "Confidence threshold",
-
         min_value=0.05,
-
         max_value=0.95,
-
         value=0.25,
-
         step=0.05,
-
         help=(
             "Lower = more detections "
             "(may include false positives)."
         ),
     )
 
-
     image_size = st.select_slider(
-
         "Inference image size",
-
         options=[
             320,
             480,
@@ -1342,9 +1130,7 @@ with st.sidebar:
             768,
             960
         ],
-
         value=640,
-
         help=(
             "Larger sizes can improve "
             "accuracy on small objects "
@@ -1352,43 +1138,39 @@ with st.sidebar:
         ),
     )
 
-
     st.divider()
 
-
-    st.markdown(
-        textwrap.dedent('<div class="side-caption">'
-        'MODEL'
-        '</div>'),
-        unsafe_allow_html=True
+    st.html(
+        """
+        <div class="side-caption">
+            MODEL
+        </div>
+        """
     )
-
 
     st.caption(
         "best.pt · YOLOv8n"
     )
 
-
-    st.markdown(
-        textwrap.dedent('<div class="side-caption">'
-        'CLASSES'
-        '</div>'),
-        unsafe_allow_html=True
+    st.html(
+        """
+        <div class="side-caption">
+            CLASSES
+        </div>
+        """
     )
-
 
     st.caption(
         "🔥 Fire   ·   💨 Smoke"
     )
 
-
-    st.markdown(
-        textwrap.dedent('<div class="side-caption">'
-        'INPUT FORMATS'
-        '</div>'),
-        unsafe_allow_html=True
+    st.html(
+        """
+        <div class="side-caption">
+            INPUT FORMATS
+        </div>
+        """
     )
-
 
     st.caption(
         "JPG · JPEG · PNG · WEBP"
@@ -1425,55 +1207,40 @@ with tab_upload:
 
     with left:
 
-        st.markdown(
-            textwrap.dedent("""
+        st.html(
+            """
             <div class="card">
 
                 <div class="section-label">
-
                     <span class="step-tag">
                         1
                     </span>
-
                     INPUT
-
                 </div>
-
 
                 <div class="card-title">
-
                     Drop an image
-
                 </div>
 
-
                 <div class="card-sub">
-
                     Upload a fire/smoke scene
                     and run the trained detector.
-
                 </div>
 
             </div>
-            """),
-            unsafe_allow_html=True,
+            """
         )
-
 
         st.write("")
 
-
         uploaded_file = st.file_uploader(
-
             "Upload image",
-
             type=[
                 "jpg",
                 "jpeg",
                 "png",
                 "webp"
             ],
-
             label_visibility="collapsed",
         )
 
@@ -1484,18 +1251,16 @@ with tab_upload:
                 uploaded_file
             ).convert("RGB")
 
-
             st.image(
                 image,
                 caption="Original image",
                 use_container_width=True
             )
 
-
         else:
 
-            st.markdown(
-                textwrap.dedent("""
+            st.html(
+                """
                 <div class="empty-state">
 
                     <div class="big">
@@ -1507,8 +1272,7 @@ with tab_upload:
                     a file above.
 
                 </div>
-                """),
-                unsafe_allow_html=True,
+                """
             )
 
 
@@ -1518,40 +1282,29 @@ with tab_upload:
 
     with right:
 
-        st.markdown(
-            textwrap.dedent("""
+        st.html(
+            """
             <div class="card">
 
                 <div class="section-label">
-
                     <span class="step-tag">
                         2
                     </span>
-
                     INFERENCE
-
                 </div>
-
 
                 <div class="card-title">
-
                     Detection settings
-
                 </div>
 
-
                 <div class="card-sub">
-
                     Adjust confidence and image size
                     from the sidebar, then run inference.
-
                 </div>
 
             </div>
-            """),
-            unsafe_allow_html=True,
+            """
         )
-
 
         st.write("")
 
@@ -1565,7 +1318,6 @@ with tab_upload:
                 / 1024
             )
 
-
             m1, m2 = st.columns(2)
 
 
@@ -1575,7 +1327,6 @@ with tab_upload:
                     uploaded_file.name[:20]
                 )
 
-
                 if len(
                     uploaded_file.name
                 ) > 20:
@@ -1583,8 +1334,8 @@ with tab_upload:
                     file_display += "…"
 
 
-                st.markdown(
-                    textwrap.dedent(f"""
+                st.html(
+                    f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1603,15 +1354,14 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """),
-                    unsafe_allow_html=True,
+                    """
                 )
 
 
             with m2:
 
-                st.markdown(
-                    textwrap.dedent(f"""
+                st.html(
+                    f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1630,24 +1380,21 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """),
-                    unsafe_allow_html=True,
+                    """
                 )
 
 
             st.write("")
-
 
             run_detection = st.button(
                 "Run Detection  →",
                 use_container_width=True
             )
 
-
         else:
 
-            st.markdown(
-                textwrap.dedent("""
+            st.html(
+                """
                 <div class="empty-state">
 
                     <div class="big">
@@ -1658,10 +1405,8 @@ with tab_upload:
                     to enable detection.
 
                 </div>
-                """),
-                unsafe_allow_html=True,
+                """
             )
-
 
             run_detection = False
 
@@ -1701,7 +1446,6 @@ with tab_upload:
 
                 t0 = time.time()
 
-
                 results = model.predict(
                     source=temp_path,
                     conf=confidence,
@@ -1709,14 +1453,11 @@ with tab_upload:
                     verbose=False
                 )
 
-
                 elapsed = (
                     time.time() - t0
                 )
 
-
                 result = results[0]
-
 
                 status.update(
                     label=(
@@ -1732,7 +1473,6 @@ with tab_upload:
             # ------------------------------------------------
 
             annotated = result.plot()
-
 
             annotated_rgb = (
                 annotated[:, :, ::-1]
@@ -1756,11 +1496,9 @@ with tab_upload:
                         box.cls[0].item()
                     )
 
-
                     conf = float(
                         box.conf[0].item()
                     )
-
 
                     xyxy = (
                         box.xyxy[0]
@@ -1768,40 +1506,41 @@ with tab_upload:
                     )
 
 
-                    rows.append({
+                    rows.append(
+                        {
+                            "Class":
+                                result.names[
+                                    class_id
+                                ],
 
-                        "Class":
-                            result.names[
-                                class_id
-                            ],
+                            "Confidence":
+                                f"{conf * 100:.2f}%",
 
-                        "Confidence":
-                            f"{conf * 100:.2f}%",
+                            "X1":
+                                round(
+                                    xyxy[0],
+                                    1
+                                ),
 
-                        "X1":
-                            round(
-                                xyxy[0],
-                                1
-                            ),
+                            "Y1":
+                                round(
+                                    xyxy[1],
+                                    1
+                                ),
 
-                        "Y1":
-                            round(
-                                xyxy[1],
-                                1
-                            ),
+                            "X2":
+                                round(
+                                    xyxy[2],
+                                    1
+                                ),
 
-                        "X2":
-                            round(
-                                xyxy[2],
-                                1
-                            ),
-
-                        "Y2":
-                            round(
-                                xyxy[3],
-                                1
-                            ),
-                    })
+                            "Y2":
+                                round(
+                                    xyxy[3],
+                                    1
+                                ),
+                        }
+                    )
 
 
             # =================================================
@@ -1811,8 +1550,8 @@ with tab_upload:
             st.markdown("---")
 
 
-            st.markdown(
-                textwrap.dedent("""
+            st.html(
+                """
                 <div class="section-label">
 
                     <span class="step-tag">
@@ -1823,14 +1562,10 @@ with tab_upload:
 
                 </div>
 
-
                 <div class="card-title">
-
                     Detection output
-
                 </div>
-                """),
-                unsafe_allow_html=True,
+                """
             )
 
 
@@ -1851,7 +1586,8 @@ with tab_upload:
 
                 st.image(
                     annotated_rgb,
-                    caption="YOLOv8 detection result",
+                    caption=
+                    "YOLOv8 detection result",
                     use_container_width=True
                 )
 
@@ -1886,8 +1622,8 @@ with tab_upload:
 
                 with c1:
 
-                    st.markdown(
-                        textwrap.dedent(f"""
+                    st.html(
+                        f"""
                         <div
                             class="metric accent-fire"
                         >
@@ -1901,15 +1637,14 @@ with tab_upload:
                             </div>
 
                         </div>
-                        """),
-                        unsafe_allow_html=True,
+                        """
                     )
 
 
                 with c2:
 
-                    st.markdown(
-                        textwrap.dedent(f"""
+                    st.html(
+                        f"""
                         <div
                             class="metric accent-smoke"
                         >
@@ -1923,16 +1658,15 @@ with tab_upload:
                             </div>
 
                         </div>
-                        """),
-                        unsafe_allow_html=True,
+                        """
                     )
 
 
                 st.write("")
 
 
-                st.markdown(
-                    textwrap.dedent(f"""
+                st.html(
+                    f"""
                     <div class="metric">
 
                         <div class="label">
@@ -1949,8 +1683,7 @@ with tab_upload:
                         </div>
 
                     </div>
-                    """),
-                    unsafe_allow_html=True,
+                    """
                 )
 
 
@@ -1960,7 +1693,6 @@ with tab_upload:
                 if rows:
 
                     pills = ""
-
 
                     for row in rows:
 
@@ -1980,24 +1712,18 @@ with tab_upload:
                         pills += (
                             f'<span '
                             f'class="det-pill">'
-
                             f'<span '
                             f'class="{dot}">'
                             f'</span>'
-
                             f'{row["Class"]}'
-
                             f' · '
-
                             f'{row["Confidence"]}'
-
                             f'</span>'
                         )
 
 
-                    st.markdown(
-                        pills,
-                        unsafe_allow_html=True
+                    st.html(
+                        pills
                     )
 
 
@@ -2015,7 +1741,9 @@ with tab_upload:
                 )
 
 
-                df = pd.DataFrame(rows)
+                df = pd.DataFrame(
+                    rows
+                )
 
 
                 st.dataframe(
@@ -2108,8 +1836,8 @@ with tab_upload:
 
             else:
 
-                st.markdown(
-                    textwrap.dedent("""
+                st.html(
+                    """
                     <div class="empty-state">
 
                         <div class="big">
@@ -2126,8 +1854,7 @@ with tab_upload:
                         slider in the sidebar.
 
                     </div>
-                    """),
-                    unsafe_allow_html=True,
+                    """
                 )
 
 
@@ -2137,7 +1864,9 @@ with tab_upload:
                 temp_path
             ):
 
-                os.remove(temp_path)
+                os.remove(
+                    temp_path
+                )
 
 
 # ============================================================
@@ -2197,8 +1926,8 @@ class FireSmokeProcessor(
 
 with tab_camera:
 
-    st.markdown(
-        textwrap.dedent("""
+    st.html(
+        """
         <div class="camera-card">
 
             <div class="section-label">
@@ -2211,25 +1940,18 @@ with tab_camera:
 
             </div>
 
-
             <div class="card-title">
-
                 📷 Fire & Smoke Live Detection
-
             </div>
 
-
             <div class="card-sub">
-
                 Gunakan kamera perangkat untuk
                 mendeteksi api dan asap secara
                 langsung menggunakan YOLOv8n.
-
             </div>
 
         </div>
-        """),
-        unsafe_allow_html=True
+        """
     )
 
 
@@ -2266,13 +1988,11 @@ with tab_camera:
     if camera_type == "📱 Kamera Depan":
 
         facing_mode = "user"
-
         camera_name = "Kamera Depan"
 
     else:
 
         facing_mode = "environment"
-
         camera_name = "Kamera Belakang"
 
 
@@ -2280,8 +2000,8 @@ with tab_camera:
     # CAMERA INFORMATION
     # ========================================================
 
-    st.markdown(
-        textwrap.dedent(f"""
+    st.html(
+        f"""
         <div class="camera-info">
 
             📷 <b>Kamera:</b>
@@ -2308,8 +2028,7 @@ with tab_camera:
             untuk menghentikan kamera.
 
         </div>
-        """),
-        unsafe_allow_html=True
+        """
     )
 
 
@@ -2321,8 +2040,7 @@ with tab_camera:
 
         key=(
             "embersight-camera-"
-            +
-            facing_mode
+            + facing_mode
         ),
 
         mode=WebRtcMode.SENDRECV,
@@ -2359,7 +2077,6 @@ with tab_camera:
         video_processor_factory=
             FireSmokeProcessor,
 
-
         async_processing=True,
 
 
@@ -2372,19 +2089,16 @@ with tab_camera:
             "iceServers": [
 
                 {
-
                     "urls": [
-
                         "stun:"
                         "stun.l.google.com:19302"
-
                     ]
-
                 }
 
             ]
 
         }
+
     )
 
 
@@ -2394,15 +2108,12 @@ with tab_camera:
 
     if webrtc_ctx.state.playing:
 
-        st.markdown(
-            textwrap.dedent("""
+        st.html(
+            """
             <div class="camera-live">
-
                 🟢 CAMERA LIVE
-
             </div>
-            """),
-            unsafe_allow_html=True
+            """
         )
 
 
@@ -2411,7 +2122,6 @@ with tab_camera:
             f"{camera_name} · "
             f"Confidence {confidence:.0%}"
         )
-
 
     else:
 
@@ -2426,13 +2136,10 @@ with tab_camera:
 # 13. FOOTER
 # ============================================================
 
-st.markdown(
-    textwrap.dedent("""
+st.html(
+    """
     <div class="footer-note">
-
         EMBERSIGHT · FIRE & SMOKE DETECTION · YOLOv8
-
     </div>
-    """),
-    unsafe_allow_html=True,
+    """
 )
