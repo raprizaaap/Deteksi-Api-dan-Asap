@@ -1,10 +1,3 @@
-# ============================================================
-# EMBERSIGHT - FIRE & SMOKE DETECTION
-# YOLOv8n + Streamlit
-# Revised UI/UX + Live Camera
-# (Fixed: all HTML blocks flattened to avoid Markdown code-block bug)
-# ============================================================
-
 import streamlit as st
 from ultralytics import YOLO
 from PIL import Image
@@ -493,21 +486,33 @@ html, body, [class*="css"] {
    ====================================================== */
 
 section[data-testid="stSidebar"] {
-    background: #fcfcfa;
+    background: #fcfcfa !important;
     border-right: 1px solid var(--line);
 }
 
-.side-title {
-    font-weight: 800;
-    font-size: 1.02rem;
-    margin-bottom: 2px;
+/* Fix warna teks widget sidebar */
+section[data-testid="stSidebar"] label {
+    color: #111318 !important;
 }
 
-.side-caption {
-    font-family: 'DM Mono', monospace;
-    font-size: .72rem;
-    color: var(--muted);
-    margin: 2px 0;
+section[data-testid="stSidebar"] label p {
+    color: #111318 !important;
+    -webkit-text-fill-color: #111318 !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+    color: #111318 !important;
+}
+
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+    color: #111318 !important;
+    -webkit-text-fill-color: #111318 !important;
+}
+
+/* Caption sidebar */
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p {
+    color: #6b7078 !important;
+    -webkit-text-fill-color: #6b7078 !important;
 }
 
 /* ======================================================
